@@ -11,16 +11,18 @@ namespace MaqCalcular_v2
 
         private void btnSair_Click(object sender, EventArgs e)
         {
-            Application.Exit();  // Sair da aplicação
+            Application.Exit();  // Sair da aplicaÃ§Ã£o
         }
 
         private void txtBoxNum1_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // Permite números (0-9)
+            // Permite nÃºmeros (0-9)
+            // Permite teclas de controlo (como o Backspace para apagar)
+            // Permite o separador decimal
 
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
             {
-                // Se não for nada disto, bloqueia a tecla
+                // Se nao for nada disto, bloqueia a tecla
                 e.Handled = true;
             }
 
@@ -47,21 +49,22 @@ namespace MaqCalcular_v2
             txtBoxNum1.Focus();
         }
 
+        // MÃ©todo de validaÃ§Ã£o e cÃ¡lculo centralizado
         private void ExecutarOperacao(string operacao)
         {
-            // 1. Validação de Entrada (Igual para todos)
+            // 1. Validacao de Entrada (Igual para todos)
             bool isNum1Valido = double.TryParse(txtBoxNum1.Text, CultureInfo.InvariantCulture, out double num1);
             bool isNum2Valido = double.TryParse(txtBoxNum2.Text, CultureInfo.InvariantCulture, out double num2);
 
             if (!isNum1Valido || !isNum2Valido)
             {
-                MessageBox.Show("Insira números válidos!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Insira nÃºmeros vÃ¡lidos!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             double resultado = 0;
 
-            // 2. Lógica de Cálculo
+            // 2. LÃ³gica de CÃ¡lculo
             switch (operacao)
             {
                 case "+": resultado = num1 + num2; break;
@@ -70,14 +73,14 @@ namespace MaqCalcular_v2
                 case "/":
                     if (num2 == 0)
                     {
-                        MessageBox.Show("Divisão por zero!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("Divisï¿½o por zero!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
                     resultado = num1 / num2;
                     break;
             }
 
-            // 3. Exibição
+            // 3. ExibiÃ§Ã£o
             txtBoxResult.Text = resultado.ToString(CultureInfo.InvariantCulture);
 
             // Passar resultado para fSegundoForm
