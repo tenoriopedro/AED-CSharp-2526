@@ -13,13 +13,13 @@ As pastas estão estruturadas cronologicamente pelo formato `Ano-Mês-Dia_Semana
   * Projeto: `MaqCalcular_v2` (Windows Forms)
   * Introdução a interfaces gráficas e separação de lógica.
 
-## ⚙️ Fluxo de Trabalho para Alunos
+## ⚙️ Fluxo de Trabalho
 
 **Aviso Importante:** Este repositório serve **apenas para consulta**. Não escreva o seu código dentro desta pasta para evitar conflitos e perda de dados durante as atualizações semanais.
 
 1. **Obter o código das aulas:**
    Clone este repositório para uma pasta dedicada à consulta no seu computador:
-   `git clone [URL_DO_REPOSITORIO]`
+   `git clone https://github.com/tenoriopedro/AED-CSharp-2526.git`
    *(Para receber o código das semanas seguintes, abra o terminal nesta pasta e execute `git pull`)*.
 
 2. **Onde fazer o seu código:**
@@ -27,4 +27,4 @@ As pastas estão estruturadas cronologicamente pelo formato `Ano-Mês-Dia_Semana
    ⚠️ **Crucial:** Antes de fazer o primeiro commit no seu repositório, garanta que adiciona um ficheiro `.gitignore` configurado para Visual Studio, para impedir que as pastas de compilação pesadas (`bin/` e `obj/`) sejam enviadas para o GitHub.
 
 3. **Consultar o código:**
-   Navegue até a pasta da semana pretendida e abra o ficheiro `.sln` utilizando o **Visual Studio Community 2022** (com a carga de trabalho ".NET desktop development" instalada).
+   Navegue até a pasta da semana pretendida e abra o ficheiro `.sln` utilizando o **Visual Studio Community 2022**.
