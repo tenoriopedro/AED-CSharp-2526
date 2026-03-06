@@ -12,6 +12,9 @@ As pastas estão estruturadas cronologicamente pelo formato `Ano-Mês-Dia_Semana
 * **[`/2026-02-19_Semana_02`](./2026-02-19_Semana_02/)**
   * Projeto: `MaqCalcular_v2` (Windows Forms)
   * Introdução a interfaces gráficas e separação de lógica.
+* **[`/2026-02-26_Semana_03`](./2026-02-26_Semana_03/)**
+  * Projeto: `GestorNotas_CRUD` (Aplicação de Consola)
+  * Gerenciamento de notas com implementação de sistema CRUD estático.
 
 ## ⚙️ Fluxo de Trabalho
 
