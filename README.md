@@ -15,6 +15,11 @@ As pastas estão estruturadas cronologicamente pelo formato `Ano-Mês-Dia_Semana
 * **[`/2026-02-26_Semana_03`](./2026-02-26_Semana_03/)**
   * Projeto: `GestorNotas_CRUD` (Aplicação de Consola)
   * Gerenciamento de notas com implementação de sistema CRUD estático.
+* **[`/2026-03-05_Semana_04`](./2026-03-05_Semana_04/)**
+  * Projeto: `Array02Structs` (Aplicação de Consola)
+  * Implementação de CRUD em memória com redimensionamento de Arrays e
+   `structs`. Integração de persistência de dados em disco via `.csv` (`CsvHelper`),
+   gestão determinística de I/O com diretivas `using` e resolução dinâmica de caminhos de execução.
 
 ## ⚙️ Fluxo de Trabalho
 
