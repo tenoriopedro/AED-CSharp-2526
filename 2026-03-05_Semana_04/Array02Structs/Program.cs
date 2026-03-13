@@ -65,17 +65,12 @@ do
             DeleteData(ref arrayColab);
             break;
 
-        case 98:  // Salvar dados no ficheiro
-            WriteInFile(arrayColab, pathFile);
-            break;
-
-        case 99:  // Busca dados de um ficheiro, para um Array
-            arrayColab = ReadFromFile(pathFile);
-            Console.WriteLine($"\n- Ficheiro '{nameFile}' carregado com sucesso");
-            break;
     }
 
 } while (userOption != 0);
+
+// Salvar dados no ficheiro ao fim do programa
+WriteInFile(arrayColab, pathFile);
 
 
 static void Menu(ref int userOption)
@@ -87,15 +82,12 @@ static void Menu(ref int userOption)
     Console.WriteLine("4. Alterar");
     Console.WriteLine("5. Deletar");
 
-    Console.WriteLine("98. Guardar no ficheiro");
-    Console.WriteLine("99. Escreve no array");
-
     Console.WriteLine("0. Sair");
 
     while (true)
     {
         Console.Write("Escolha uma Opção: ");
-        if (int.TryParse(Console.ReadLine(), out userOption) && ((userOption >= 0 && userOption <=5) || userOption == 98 || userOption == 99))
+        if (int.TryParse(Console.ReadLine(), out userOption) && (userOption >= 0 && userOption <=5))
             return;
 
         Console.WriteLine("Opção Invalida, tente novamente.");
