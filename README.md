@@ -20,6 +20,9 @@ As pastas estão estruturadas cronologicamente pelo formato `Ano-Mês-Dia_Semana
   * Implementação de CRUD em memória com redimensionamento de Arrays e
    `structs`. Integração de persistência de dados em disco via `.csv` (`CsvHelper`),
    gestão determinística de I/O com diretivas `using` e resolução dinâmica de caminhos de execução.
+* **[`/2026-03-12_Semana_05`](./2026-03-12_Semana_05/)**
+  * Projeto: `GestorColaboradores_Projetos` (Aplicação de Consola)
+  * Evolução do modelo de dados para estruturas aninhadas (arrays dentro de `structs`).
 
 ## ⚙️ Fluxo de Trabalho
 
