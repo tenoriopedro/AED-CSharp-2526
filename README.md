@@ -23,6 +23,9 @@ As pastas estão estruturadas cronologicamente pelo formato `Ano-Mês-Dia_Semana
 * **[`/2026-03-12_Semana_05`](./2026-03-12_Semana_05/)**
   * Projeto: `GestorColaboradores_Projetos` (Aplicação de Consola)
   * Evolução do modelo de dados para estruturas aninhadas (arrays dentro de `structs`).
+* **[`/2026-03-19_Semana_06`](./2026-03-19_Semana_06/)**
+  * Projetos: `Array04BiDimensional`e JaggedArrays (Aplicações de Consola)
+  * Implementação e manipulação de Arrays Multidimensionais (matrizes contíguas 2D e 3D com alocação geométrica rígida) e Jagged Arrays (arrays de arrays com dimensões irregulares e independentes).
 
 ## ⚙️ Fluxo de Trabalho
 
