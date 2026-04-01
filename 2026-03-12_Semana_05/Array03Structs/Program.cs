@@ -1,27 +1,9 @@
 ﻿// Data: 13/03/2026
 // Array de Estrutura
 
-using CsvHelper;
-using CsvHelper.Configuration;
-using System.Globalization;
 
-
-Collaborator[] arrayColab = [];
+Collaborator[] arrayCollab = [];
 int userOption = 0;
-
-// AppContext.BaseDirectory -> retorna o caminho completo até onde está o .exe (Veja demonstração abaixo)
-// ../../Array02Structs/bin/Debug/net8.0/
-string nameFile = "data_colab02.csv";   // Altere nome do ficheiro, caso for necessario
-string pathFile = Path.Combine(AppContext.BaseDirectory, nameFile);   // Garante compatibilidade do separador
-                                                                      // de pastas entre Windows e Linux
-
-// Carrega dados de um ficheiro (CASO EXISTA) para manipulção dos dados
-if (File.Exists(pathFile))
-{
-    arrayColab = ReadFromFile(pathFile);
-    Console.WriteLine($"\n- Ficheiro '{nameFile}' carregado com sucesso");
-
-}
 
 
 do
@@ -31,46 +13,88 @@ do
     switch (userOption)
     {
         case 1:  // Inserir Dados
-            ShowTitle("INSERIR DADOS");
+            ShowTitle("INSERIR COLABORADOR");
 
-            InsertData(ref arrayColab);
+            InsertCollab(ref arrayCollab);
+
             break;
 
         case 2:  // Listar Dados
             ShowTitle("LISTAGEM COLABORADORES");
 
-            ListData(arrayColab);
+            ListData(arrayCollab);
 
             // Pausa para Usuário ler
-            Console.Write("\nPRESSIONE ENTER P/ CONTINUAR");
-            Console.ReadLine();
+            WaitAndGo();
             break;
 
         case 3:  // Consultar Dados
             ShowTitle("CONSULTA DE COLABORADOR");
 
-            ConsultData(arrayColab);
+            ConsultCollab(arrayCollab);
+
+            WaitAndGo();
 
             break;
 
         case 4:  // Atualizar Dados
             ShowTitle("ATUALIZAR DADOS");
 
-            UpdateData(arrayColab);
+            UpdateCollab(arrayCollab);
+
+            WaitAndGo();
+
             break;
 
         case 5: // Deletar Dados
-            ShowTitle("DELETAR DADOS");
+            ShowTitle("DELETAR");
 
-            DeleteData(ref arrayColab);
+            DeleteCollab(ref arrayCollab);
+
+            WaitAndGo();
+
+            break;
+
+        case 6:  // Inserir Projetos
+            ShowTitle("INSERIR PROJETOS");
+
+            InsertProjectToCollab(ref arrayCollab);
+
+            break;
+
+        case 7:  // Listar Projetos de UM colaborador
+            ShowTitle("PROJETOS");
+
+            int idCollab = CheckCollab(arrayCollab);
+
+            if (idCollab == -1) continue;
+
+            ListProjectCollab(arrayCollab[idCollab].Projects);
+
+            WaitAndGo();
+
+            break;
+
+        case 8:  // Atualizar Projetos de UM colaborador
+            ShowTitle("ATUALIZAR PROJETOS");
+
+            UpdateProjectCollab(arrayCollab);
+
+            WaitAndGo();
+
+            break;
+
+        case 9:  // Deletear Projetos de UM colaborador
+            ShowTitle("DELETAR PROJETOS");
+
+            DeleteProjectCollab(ref arrayCollab);
+
+            WaitAndGo();
             break;
 
     }
 
 } while (userOption != 0);
-
-// Salvar dados no ficheiro ao fim do programa
-WriteInFile(arrayColab, pathFile);
 
 
 static void Menu(ref int userOption)
@@ -81,13 +105,17 @@ static void Menu(ref int userOption)
     Console.WriteLine("3. Consultar");
     Console.WriteLine("4. Alterar");
     Console.WriteLine("5. Deletar");
+    Console.WriteLine("6. Inserir Projeto");
+    Console.WriteLine("7. Listar Projetos");
+    Console.WriteLine("8. Alterar Projeto");
+    Console.WriteLine("9. Eliminar Projeto");
 
     Console.WriteLine("0. Sair");
 
     while (true)
     {
         Console.Write("Escolha uma Opção: ");
-        if (int.TryParse(Console.ReadLine(), out userOption) && (userOption >= 0 && userOption <= 5))
+        if (int.TryParse(Console.ReadLine(), out userOption) && (userOption >= 0 && userOption <= 9))
             return;
 
         Console.WriteLine("Opção Invalida, tente novamente.");
@@ -96,113 +124,60 @@ static void Menu(ref int userOption)
 }
 
 
-static void InsertData(ref Collaborator[] colab)
+static void InsertCollab(ref Collaborator[] collab)
 {
     // Função "ReadInt" para validar um número inteiro e positvo
-    int newCode = ReadInt("Insere código Colab: ");
-
+    int newCode = ReadInt("Insere um ID para o novo colaborador: ");
 
     // Verifica se há ou não um nº de colaborador (Função GetIndexByCode)
-    if (GetIndexByCode(colab, newCode) != -1)
+    if (GetIndexByCode(collab, newCode) != -1)
     {
         Console.WriteLine("Este número de colaborador já existe! Inserção cancelada.");
         return;
     }
 
-    Array.Resize(ref colab, colab.Length + 1);
-    int index = colab.Length - 1;
+    Array.Resize(ref collab, collab.Length + 1);
+    int index = collab.Length - 1;
 
-    colab[index].Code = newCode;
+    collab[index].Code = newCode;
 
-    Console.Write("Insere o nome Colab: ");
-    colab[index].Name = Console.ReadLine();
-
-
-    // Inserção de Projetos do Colaborador
-    colab[index].Projects = [];
-    string userAnswer;
-
-    //do
-    //{
-    //    Console.Write("Adicionar Projeto[s/n]: ");
-    //    userAnswer = Console.ReadLine().ToLower();
-
-    //    if (userAnswer == "s")
-    //    {
-    //        Array.Resize(ref colab[index].Projects, colab[index].Projects.Length + 1);
-
-    //        int projIndex = colab[index].Projects.Length - 1;
-
-    //        colab[index].Projects[projIndex].IdProject = ReadInt("ID do Projeto: ");
-
-    //        Console.Write("Descrição do Projeto: ");
-    //        colab[index].Projects[projIndex].Description = Console.ReadLine();
-    //    }
-    //    else
-    //    {
-    //        Console.WriteLine("Resposta Inválida. Tente Novamente");
-    //        continue;
-    //    }
-
-    //} while (userAnswer != "n");
+    Console.Write("Insira o nome do colaborador: ");
+    collab[index].Name = Console.ReadLine();
 
 
-    while (true)
-    {
-        Console.Write("Adicionar Projeto[s/n]: ");
-        userAnswer = Console.ReadLine().ToLower();
+    // Inserção de Projetos do colaborador
+    collab[index].Projects = [];
 
-        if (userAnswer == "s")
-        {
-
-            Array.Resize(ref colab[index].Projects, colab[index].Projects.Length + 1);
-
-            int projIndex = colab[index].Projects.Length - 1;
-
-            colab[index].Projects[projIndex].IdProject = ReadInt("ID do Projeto: ");
-
-            Console.Write("Descrição do Projeto: ");
-            colab[index].Projects[projIndex].Description = Console.ReadLine();
-
-            
-        }
-        else if (userAnswer == "n")
-        {
-            break;
-        }
-        else
-        {
-            Console.WriteLine("Resposta Inválida. Tente Novamente");
-            continue;
-        }
-    }
+    // Inserção de Projetos de um colaborador
+    InsertProjectLoop(ref collab, index);
 
 
-    Console.WriteLine("\nColaborador inserido com sucesso");
+    Console.WriteLine("\ncolaborador inserido com sucesso");
 }
 
 
-static bool ListData(Collaborator[] colab)
+static bool ListData(Collaborator[] collab)
 {
-    if (colab.Length != 0)
+    if (collab.Length != 0)
     {
-        for (int i = 0; i < colab.Length; i++)
+        for (int i = 0; i < collab.Length; i++)
         {
-            Console.WriteLine($"\nCodigo do {i + 1}º = {colab[i].Code}");
-            Console.WriteLine($"Nome = {colab[i].Name}");
+            Console.WriteLine($"\nID: {collab[i].Code}");
+            Console.WriteLine($"Nome: {collab[i].Name}");
 
-            if (colab[i].Projects != null && colab[i].Projects.Length > 0)
+
+            if (collab[i].Projects != null && collab[i].Projects.Length > 0)
             {
-                for (int j = 0; j < colab[i].Projects.Length; j++)
-                {
-                    Console.WriteLine($"{j + 1}º | ID: {colab[i].Projects[j].IdProject} | Desc: {colab[i].Projects[j].Description}");
-                }
+                ListProjectCollab(collab[i].Projects);
             }
 
             else
             {
                 Console.WriteLine("Nenhum projeto associado");
             }
+
+            Console.WriteLine(new string('-', 20));
+
         }
         return true;
     }
@@ -212,146 +187,216 @@ static bool ListData(Collaborator[] colab)
 }
 
 
-static void ConsultData(Collaborator[] colab)
+static void ConsultCollab(Collaborator[] collab)
 {
-    int indexToConsult = GetIndexByCode(colab, ReadInt("Insere código de colaborador para consultar: "));
+    int indexToConsult = GetIndexByCode(collab, ReadInt("Insere ID de colaborador para consulta: "));
 
     if (indexToConsult == -1)
     {
-        Console.WriteLine("\nColaborador não encontrado");
+        Console.WriteLine("\ncolaborador não encontrado");
         return;
     }
 
-    Console.WriteLine("\n--- Dados do Colaborador ---");
-    Console.WriteLine($"Codigo: {colab[indexToConsult].Code}");
-    Console.WriteLine($"Nome: {colab[indexToConsult].Name}");
+    Console.WriteLine("\n--- Dados do colaborador ---");
+    Console.WriteLine($"ID: {collab[indexToConsult].Code}");
+    Console.WriteLine($"Nome: {collab[indexToConsult].Name}");
+    ListProjectCollab(collab[indexToConsult].Projects);
 
 }
 
 
-static void UpdateData(Collaborator[] colab)
+static void UpdateCollab(Collaborator[] collab)
 {
-    if (!ListData(colab)) return;
+    if (!ListData(collab)) return;
 
-    int index = GetIndexByCode(colab, ReadInt("\nQual codigo deseja alterar: "));
+    int index = GetIndexByCode(collab, ReadInt("\nQual ID de colaborador deseja alterar: "));
 
     if (index == -1)
     {
-        Console.WriteLine("\nColaborador não encontrado");
+        Console.WriteLine("\ncolaborador não encontrado");
         return;
     }
 
-    Console.Write("Insere o NOVO nome do Colab: ");
-    colab[index].Name = Console.ReadLine();
+    Console.Write("Insere o NOVO nome do colaborador: ");
+    collab[index].Name = Console.ReadLine();
 
     Console.WriteLine("\n- Dados atualizado com sucesso");
 }
 
 
-static void DeleteData(ref Collaborator[] colab)
+static void DeleteCollab(ref Collaborator[] collab)
 {
-    if (!ListData(colab)) return;
+    if (!ListData(collab)) return;
 
     // Validação de um inteiro e se existe um colaborador
-    int indexToDelete = GetIndexByCode(colab, ReadInt("Insere código Colab: "));
+    int indexToDelete = GetIndexByCode(collab, ReadInt("Insere ID do colaborador: "));
 
     if (indexToDelete == -1)
     {
-        Console.WriteLine("Usuário não encontrado");
+        Console.WriteLine("Colaborador não encontrado");
         return;
     }
-    ;
 
-    Collaborator[] tempArray = new Collaborator[colab.Length - 1];
+    Collaborator[] tempArray = new Collaborator[collab.Length - 1];
     int newIndex = 0;
 
-    for (int i = 0; i < colab.Length; i++)
+    for (int i = 0; i < collab.Length; i++)
     {
         if (i != indexToDelete)
         {
-            tempArray[newIndex] = colab[i];
+            tempArray[newIndex] = collab[i];
             newIndex++;
         }
     }
-    colab = tempArray;
+    collab = tempArray;
 
     Console.WriteLine("Colaborador deletado com sucesso.");
 }
 
 
-static void WriteInFile(Collaborator[] colab, string pathFile)
+static void InsertProjectToCollab(ref Collaborator[] collab)
 {
-    if (colab.Length == 0)
+
+    if (!ListData(collab)) return;
+
+
+    int idCollab = CheckCollab(collab);
+
+    if (idCollab == -1) return;
+
+
+    // Inserção de Projetos de um colaborador
+    InsertProjectLoop(ref collab, idCollab);
+
+}
+
+
+static void ListProjectCollab(Project[] projects)
+{
+
+    Console.WriteLine("Projetos {");
+
+    for (int j = 0; j < projects.Length; j++)
     {
-        Console.WriteLine("Não há dados na memória.");
+        Console.Write($"    ID: {projects[j].IdProject} | ");
+        Console.WriteLine($"Desc: {projects[j].Description}, ");
+    }
+
+    Console.WriteLine("}");
+}
+
+
+static void UpdateProjectCollab(Collaborator[] collab)
+{
+    if (!ListData(collab)) return;
+
+    // Busca indice(ARRAY) do colaborador
+    int idCollab = CheckCollab(collab);
+
+    if (idCollab == -1) return;
+
+
+    if ((collab[idCollab].Projects == null || collab[idCollab].Projects.Length == 0))
+    {
+        Console.WriteLine("Não há projetos associados a este Colaborador.");
         return;
     }
 
-    CsvConfiguration csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
+    ListProjectCollab(collab[idCollab].Projects);
+
+
+    int targetIdProject = ReadInt("ID do Projeto: ");
+
+    int projIndex = GetIdProject(collab, idCollab, targetIdProject);
+
+    if (projIndex == -1)
     {
-        Delimiter = ";"
-    };
-
-    // uso do using é para segurança na manipulação dos ficheiros
-    using StreamWriter textWriter = new StreamWriter(pathFile);
-    using CsvWriter writer = new CsvWriter(textWriter, csvConfig);
-
-    // Faz cabeçalho no ficheiro
-    writer.WriteField("Codigo");
-    writer.WriteField("Nome");
-    writer.NextRecord();
-
-    // Escreve no ficheiro o que estiver na memória
-    for (int i = 0; i < colab.Length; i++)
-    {
-        writer.WriteField(colab[i].Code.ToString());
-        writer.WriteField(colab[i].Name);
-
-        writer.NextRecord();
+        Console.WriteLine("ID de projeto não existe, tente outro...");
+        return;
     }
 
-    Console.WriteLine("\n- Dados foram guardados com sucesso");
+    while (true) 
+    {
+        Console.Write("Insira um novo ID ou ENTER para manter ID ATUAL: ");
+        var userOutput = Console.ReadLine();
+
+        if (userOutput == "")
+        {
+            collab[idCollab].Projects[projIndex].IdProject = targetIdProject;
+
+        }
+
+        else if (int.TryParse(userOutput, out int newIdProject))
+        {
+            collab[idCollab].Projects[projIndex].IdProject = newIdProject;
+        }
+
+        else
+        {
+            Console.WriteLine("Valor inválido. Tente novamente");
+            continue;
+        }
+
+
+        Console.Write("Descrição do Projeto [ENTER p/ manter Descrição]: ");
+        var userOutputDescription =  Console.ReadLine();
+
+        if (userOutputDescription != "")
+        {
+            collab[idCollab].Projects[projIndex].Description = userOutputDescription;
+        }
+
+        break;
+  
+
+    }
+    Console.WriteLine("\nProjeto Atualizado com sucesso.\n");
 
 }
 
 
-static Collaborator[] ReadFromFile(string pathFile)
+static void DeleteProjectCollab(ref Collaborator[] collab)
 {
-    // Caso não exista ficheiro retornamos com um Array VAZIO
-    if (!File.Exists(pathFile)) return [];
+    if (!ListData(collab)) return;
+    
+    // Busca indice(ARRAY) do colaborador
+    int idCollab = CheckCollab(collab);
 
-    // Contagem de todas as linhas do ficheiro para definir um tamanho para o Array
-    int sizeFile = File.ReadAllLines(pathFile).Length;
+    if (idCollab == -1) return;
 
-    // Este '1' é precisamente o CABEÇALHO logo se só tiver o CABEÇALHO, retorna um Array VAZIO
-    if (sizeFile <= 1) return [];
-
-    CsvConfiguration csvConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
+    if ((collab[idCollab].Projects == null || collab[idCollab].Projects.Length == 0 ))
     {
-        Delimiter = ";",
-        HasHeaderRecord = true
-    };
-
-    using var textReader = new StreamReader(pathFile);
-    using CsvReader reader = new CsvReader(textReader, csvConfig);
-
-    Collaborator[] csvFile = new Collaborator[sizeFile - 1];   // o -1 é para tirar a contagem do cabeçalho
-
-    // Consumo de cabeçalho ANTES do ciclo
-    reader.Read();
-    reader.ReadHeader();
-
-    for (int i = 0; i < csvFile.Length; i++)
-    {
-        reader.Read();
-        csvFile[i].Code = reader.GetField<int>("Codigo");
-        csvFile[i].Name = reader.GetField<string>("Nome");
+        Console.WriteLine("Não há projetos associados a este Colaborador.");
+        return;
     }
 
-    return csvFile;
+    ListProjectCollab(collab[idCollab].Projects);
 
+
+    int indexToDelete = GetIdProject(collab, idCollab, ReadInt("ID para deletar: "));
+
+    if (indexToDelete == -1)
+    {
+        Console.WriteLine("Este ID não existe");
+        return;
+    }
+
+    Project[] tempArray = new Project[collab[idCollab].Projects.Length - 1];
+    int newIndex = 0;
+
+    for (int i = 0; i < collab[idCollab].Projects.Length; i++)
+    {
+        if (i != indexToDelete)
+        {
+            tempArray[newIndex] = collab[idCollab].Projects[i];
+            newIndex++;
+        }
+    }
+
+    collab[idCollab].Projects = tempArray;
+
+    Console.WriteLine("Projeto deletado com sucesso.");
 }
-
 
 static int ReadInt(string msg)
 {
@@ -368,14 +413,87 @@ static int ReadInt(string msg)
 }
 
 
-static int GetIndexByCode(Collaborator[] colab, int targetCode)
+static int GetIndexByCode(Collaborator[] collab, int targetCode)
 {
     // Verifica se colaborador existe
-    for (int i = 0; i < colab.Length; i++)
+    for (int i = 0; i < collab.Length; i++)
     {
-        if (colab[i].Code == targetCode) return i;
+        if (collab[i].Code == targetCode) return i;
     }
     return -1;  // Não encontrou ninguem
+}
+
+static int GetIdProject(Collaborator[] collab, int idCollab, int targetCode)
+{
+    for(int i = 0; i < collab[idCollab].Projects.Length; i++)
+    {
+        if (collab[idCollab].Projects[i].IdProject == targetCode) return i;
+    }
+    return -1; 
+}
+
+
+static int CheckCollab(Collaborator[] collab)
+{
+    int idCollab = ReadInt("Insira o ID do colaborador: ");
+
+    int indexArray = GetIndexByCode(collab, idCollab);
+
+
+    if (indexArray == -1)
+    {
+        Console.WriteLine("Colaborador não encontrado");
+        return -1;
+    }
+    // Id do COLABORADOR dentro do array(index) ou -1 quando não encontra ninguem
+    return indexArray;
+
+}
+
+
+static void InsertProjectLoop(ref Collaborator[] collab, int index)
+{
+    string userAnswer;
+
+    while (true)
+    {
+        Console.Write("Deseja Adicionar Projeto[s/n]: ");
+        userAnswer = Console.ReadLine().ToLower();
+
+        if (userAnswer == "s")
+        {
+
+            int targetIdProject = ReadInt("ID do Projeto: ");
+
+            if (GetIdProject(collab, index, targetIdProject) != -1)
+            {
+
+                Console.WriteLine("Este Projeto já existe para este colaborador! Inserção cancelada.");
+                continue;
+            }
+
+            Array.Resize(ref collab[index].Projects, collab[index].Projects.Length + 1);
+
+            int projIndex = collab[index].Projects.Length - 1;
+
+            collab[index].Projects[projIndex].IdProject = targetIdProject;
+
+            Console.Write("Descrição do Projeto: ");
+            collab[index].Projects[projIndex].Description = Console.ReadLine();
+
+        }
+
+        else if (userAnswer == "n")
+        {
+            break;
+        }
+
+        else
+        {
+            Console.WriteLine("Resposta Inválida. Tente Novamente");
+            continue;
+        }
+    }
 }
 
 
@@ -408,13 +526,18 @@ static void ShowTitle(string title)
     Console.WriteLine(new string('-', menuWidth));
 }
 
+static void WaitAndGo()
+{
+    Console.Write("\nPRESSIONE ENTER P/ CONTINUAR");
+    Console.ReadLine();
+    Console.Clear();
+}
+
 
 struct Collaborator
 {
     public int Code;
     public string Name;
-    public byte Age;
-    public double Salary;
     public Project[] Projects;
 }
 
