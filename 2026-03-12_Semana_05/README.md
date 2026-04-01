@@ -1,35 +1,49 @@
 # Gestor de Colaboradores e Projetos (Console App)
 
-Uma aplicação de consola desenvolvida para gerir colaboradores e os respetivos projetos.
+Uma aplicação de consola desenvolvida em C# para gerir colaboradores e os respetivos projetos associados. O sistema opera inteiramente em memória, demonstrando a manipulação de matrizes dinâmicas e o encapsulamento de lógica num CRUD de duas camadas.
 
-## O que fizemos
+## Arquitetura de Dados
 
-**Estruturas de Dados Aninhadas:** Evolução do modelo de dados. Um `Collaborator` passou a poder conter múltiplos `Projects`, geridos através de arrays redimensionados dinamicamente.
-
-O programa assenta no uso de Tipos de Valor (`struct`):
+**Estruturas de Dados Aninhadas:** O modelo assenta no uso de Tipos de Valor (`struct`). A evolução principal deste projeto é a capacidade de um `Collaborator` conter múltiplos `Projects`, geridos através de arrays que são redimensionados dinamicamente (`Array.Resize`) a cada nova inserção ou remoção.
 
 ```csharp
-struct Collaborator {
+struct Collaborator 
+{
     public int Code;
     public string Name;
-    public byte Age;
-    public double Salary;
     public Project[] Projects;
 }
 
-struct Project {
+struct Project 
+{
     public int IdProject;
     public string Description;
 }
 ```
 
-### Funcionalidades Editadas
+## Funcionalidades Implementadas
 
-* **Inserir:** Adicionar novos colaboradores (código e nome) e permite anexar múltiplos projetos (ID e Descrição).
-* **Listar:** Apresentar todos os colaboradores e a listagem encadeada dos seus projetos.
+O sistema possui uma interface de consola interativa baseada num menu cíclico, implementando um CRUD completo para ambas as entidades:
+
+**Gestão de Colaboradores (Entidade Principal):**
+
+* **Inserir:** Adição de novos colaboradores com validação de ID único.
+
+* **Listar:** Apresentação de todos os colaboradores e respetiva árvore de projetos.
+
+* **Consultar:** Pesquisa direta de um colaborador através do seu ID.
+
+* **Alterar:** Atualização do nome do colaborador.
+
+* **Deletar:** Remoção de um colaborador e reestruturação do array principal para libertar a memória.
 
 
-## Melhorias para este programa
+## Gestão de Projetos (Entidade Aninhada):
 
-* **Migração do Formato de Persistência:** Substituir o armazenamento em CSV por serialização em JSON (via `System.Text.Json`). Esta é a via técnica obrigatória para conseguir guardar estruturas de dados hierárquicas e garantir que os arrays de projetos não são apagados.
-* **Otimização Algorítmica da Memória:** Erradicar o uso de `Array.Resize` com incrementos unitários (+1). A inserção de projetos deve passar a exigir a quantidade exata de antemão (para alocar o array com o tamanho definitivo de uma só vez) ou implementar uma lógica de pré-alocação multiplicativa (separando capacidade lógica de tamanho físico).
+* **Inserir Projeto:** Capacidade de anexar múltiplos projetos a um colaborador específico, inicializando ou redimensionando o seu array interno.
+
+* **Listar Projetos:** Visualização isolada dos projetos de um único colaborador.
+
+* **Alterar Projeto:** Atualização do ID ou Descrição de um projeto existente sem destruir os restantes.
+
+* **Eliminar Projeto:** Remoção cirúrgica de um projeto específico dentro do array do colaborador.
